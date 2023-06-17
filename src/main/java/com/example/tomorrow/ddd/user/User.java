@@ -29,5 +29,6 @@ public class User implements Serializable { //doc of mongo
     @Builder.Default
     private  Boolean isDelete = false;
     private Long createdAt;
+    private Integer role;
 
 }

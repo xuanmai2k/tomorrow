@@ -6,6 +6,7 @@ import com.example.tomorrow.ddd.product.command.CommandProduct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,6 +66,17 @@ public class ProductController {
         try {
             Product result = productApplication.update(commandProduct, id.toHexString());
             return Optional.of(result);
+        }catch (Exception e){
+            return Optional.empty();
+        }
+    }
+
+    @PostMapping("/search")
+    public Optional<List<Product>> search (HttpServletRequest httpServletRequest,@RequestBody CommandProduct commandProduct, @RequestParam("page") Integer page,@RequestParam("size") Integer size){
+        try {
+            Page<Product> result = productApplication.search(commandProduct, page, size);
+            List<Product> list = result.getContent();
+            return Optional.of(list);
         }catch (Exception e){
             return Optional.empty();
         }

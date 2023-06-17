@@ -22,7 +22,7 @@ public class UserApplication {
     private MongoTemplate mongoTemplate; //thư viện làm này làm kia vs mongo
 
     public User create(CommandUser commandUser) throws Exception {
-        if (StringUtils.isBlank(commandUser.getUserName()) || StringUtils.isBlank(commandUser.getPassword()) || StringUtils.isBlank(commandUser.getName()) || StringUtils.isBlank(commandUser.getEmail())) {
+        if (StringUtils.isBlank(commandUser.getUserName()) || StringUtils.isBlank(commandUser.getPassword()) || StringUtils.isBlank(commandUser.getName()) || StringUtils.isBlank(commandUser.getEmail()) || StringUtils.isBlank(commandUser.getPhone())) {
             throw new Exception("missing params");
         }
         User user = User.builder()
@@ -80,7 +80,7 @@ public class UserApplication {
         query.addCriteria(Criteria.where("isDelete").is(false));
         User updateUser = mongoTemplate.findOne(query, User.class);
         if (updateUser != null) {
-            if (StringUtils.isBlank(commandUser.getUserName()) || StringUtils.isBlank(commandUser.getPassword()) || StringUtils.isBlank(commandUser.getName()) || StringUtils.isBlank(commandUser.getEmail())) {
+            if (StringUtils.isBlank(commandUser.getUserName()) || StringUtils.isBlank(commandUser.getPassword()) || StringUtils.isBlank(commandUser.getName()) || StringUtils.isBlank(commandUser.getEmail()) || StringUtils.isBlank(commandUser.getPhone())) {
                 throw new Exception("missing params");
             }
             updateUser.setName(commandUser.getName());

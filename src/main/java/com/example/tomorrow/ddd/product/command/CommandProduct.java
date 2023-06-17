@@ -16,4 +16,8 @@ public class CommandProduct {
     private String descriptionProduct;
     private String urlImageProduct;
     private Integer numInventory;
+    private String keyword;
+    private Integer value;
+    @Builder.Default
+    private Boolean ascending=true;
 }

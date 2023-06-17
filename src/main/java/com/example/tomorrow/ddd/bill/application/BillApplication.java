@@ -21,12 +21,12 @@ public class BillApplication {
     private MongoTemplate mongoTemplate;
 
     public Bill create(CommandBill commandBill) throws Exception {
-        if (commandBill.getBillingDetail() == null) {
+        if (commandBill.getBillingDetails() == null) {
             throw new Exception("missing params");
         }
         Bill bill = Bill.builder()
                 .idUser(commandBill.getIdUser())
-                .billingDetail(commandBill.getBillingDetail())
+                .billingDetails(commandBill.getBillingDetails())
                 .createdAt(System.currentTimeMillis())
                 .build();
         return iBillRepository.insert(bill);
@@ -75,13 +75,13 @@ public class BillApplication {
         query.addCriteria(Criteria.where("isDelete").is(false));
         Bill updateBill = mongoTemplate.findOne(query, Bill.class);
         if (updateBill != null) {
-            if (commandBill.getBillingDetail() == null) {
+            if (commandBill.getBillingDetails() == null) {
                 throw new Exception("missing params");
             }
             updateBill.setIdUser(commandBill.getIdUser());
-            updateBill.setBillingDetail(commandBill.getBillingDetail());
+            updateBill.setBillingDetails(commandBill.getBillingDetails());
             updateBill.setCreatedAt(current_time);
-            return mongoTemplate.save(updateBill,"Bill");
+            return mongoTemplate.save(updateBill,"bill");
         }
         return null;
     }

@@ -6,13 +6,18 @@ import com.example.tomorrow.ddd.product.repository.IProductRepository;
 import io.micrometer.common.util.StringUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
+
 
 
 @Component
@@ -112,4 +117,35 @@ public class ProductApplication {
             return null;
         }
     }
+
+    public Page<Product> search (CommandProduct commandProduct, Integer page, Integer size) throws Exception{
+        Pageable pageRequest = PageRequest.of(page, size);
+        List<Product> results = new ArrayList<>();
+        Query query = new Query();
+        if(commandProduct == null){
+            throw new Exception("missing params");
+        }
+
+        query.addCriteria(Criteria.where("isDelete").is(false));
+        if(!StringUtils.isBlank(commandProduct.getKeyword())){
+            query.addCriteria(Criteria.where("nameProduct").regex(commandProduct.getKeyword(),"i"));//is(commandProduct.getKeyword()));
+        }
+        if(commandProduct.getValue() != null ){
+            query.addCriteria(Criteria.where("priceProduct").gte(commandProduct.getValue()));//.with(Sort.by("priceProduct").ascending());
+            //query.with(Sort.by(Sort.Direction.DESC, "priceProduct"));
+        }
+        List<Product> productList = mongoTemplate.find(query.with(pageRequest), Product.class);
+
+        if(commandProduct.getAscending()){
+            productList.sort(Comparator.comparing(Product::getPriceProduct));
+        }else {
+            productList.sort(Comparator.comparing(Product::getPriceProduct).reversed());
+        }
+        return PageableExecutionUtils.getPage(
+                productList,
+                pageRequest,
+                ()->mongoTemplate.count(query,Product.class));
+    }
+
+
 }

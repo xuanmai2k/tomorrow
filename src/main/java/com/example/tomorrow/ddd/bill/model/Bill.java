@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class Bill implements Serializable {
     @JsonSerialize (using = ToStringSerializer.class)
     ObjectId _id;
     private String idUser;
-    private BillingDetail billingDetail;
+    private List<BillingDetail> billingDetails;
     @Builder.Default
     private Boolean isDelete = false;
     private Long createdAt;
