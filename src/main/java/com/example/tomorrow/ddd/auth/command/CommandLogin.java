@@ -9,6 +9,6 @@ import lombok.*;
 @Setter
 @Getter
 public class CommandLogin {
-    private String userName;
+    private String Phone;
     private String password;
 }

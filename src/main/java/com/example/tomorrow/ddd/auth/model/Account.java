@@ -32,6 +32,7 @@ public class Account implements UserDetails {
     private String status;
     private  Boolean isDelete;
     private Long createdAt;
+    private String userId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
